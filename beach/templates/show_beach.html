@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load jsonify %}
+
+{% block content %}
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <h1>{{beach_name}}</h1>
+
+    <div class="container">
+        <div id="scatterChart" style="width:100%; height:400px;"></div>
+        <div id="samplesByYearGraph" style="width:100%; height:400px;"></div>
+    </div>
+
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="{% static 'js/samples_by_year_hc.js' %}"></script>
+    <script src="{% static 'js/single_beach_scatter_hc.js' %}"></script>
+
+    <script>
+        var resultsByDate = {{ results_by_date | jsonify }};
+        drawScatterChart(resultsByDate['2017']);
+        var samplesByYear = {{ samples_by_year | jsonify }};
+        drawSamplesByYear(samplesByYear);
+    </script>
+
+{% endblock %}

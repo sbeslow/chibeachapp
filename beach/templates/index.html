@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load jsonify %}
+
+{% block content %}
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <div class="container">
+        <table class="table">
+            {% for beach_name in beach_names %}
+                <tr><td><a href="{% url 'show_beach' beach_name %}">{{beach_name}}</a></td></tr>
+            {% endfor %}
+        </table>
+    </div>   
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}
