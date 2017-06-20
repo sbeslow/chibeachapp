@@ -25,7 +25,7 @@ SECRET_KEY = '^=uahy4i6^piox!x$ew^w=7n2*#9fmaw=2t6re#ycmq6s%r%q$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', 'chibeaches.herokuapp.com']
 
 
 # Application definition
