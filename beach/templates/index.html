@@ -8,11 +8,28 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
           integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <div class="container">
-        <table class="table">
-            {% for beach_name in beach_names %}
-                <tr><td><a href="{% url 'show_beach' beach_name %}">{{beach_name}}</a></td></tr>
-            {% endfor %}
-        </table>
+        <div class="col-sm-6">
+            <h1>Chicago Fecal Report</h1>
+            <h3>The quest to adequently warn the pubic of an invisible health risk</h3>
+            <h5>Every weekday, the Park District samples the beaches</h5>
+        </div>
+        <div class="col-sm-6">
+            <h2>Recent Failed Tests</h2>
+            <table class="table">
+                {% for failed_test in failed_tests %}
+                    <tr>
+                        <td>{{ failed_test.beach_name }}</td>
+                        <td>{{ failed_test.date }}</td>
+                        <td>{{ failed_test.dna_reading_mean }}</td>
+                        <td>{{ failed_test.is_today }}</td>
+                    </tr>
+                {% endfor %}
+
+            </table>
+
+        </div>
+
+
     </div>   
 
 {% endblock %}

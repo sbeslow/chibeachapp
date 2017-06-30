@@ -3,15 +3,20 @@ import pandas as pd
 from chibeachapp.settings import BASE_DIR
 import pdb
 import os
+import requests
+import io
+from beach.chi_portal import get_beach_days_2017
+from beach.beach_days import find_failed_tests
 
 
 from django.http import HttpResponse
 
 
 def index(request):
-    lab_results = pd.read_csv(os.path.join(BASE_DIR, 'data', 'lab_results_cleaned_20170606.csv'))
-    beach_names = lab_results['beach_name'].unique()
-    return render(request, 'index.html', {'beach_names': beach_names})
+    beach_days = get_beach_days_2017()
+    ret_val = {}
+    ret_val['failed_tests'] = find_failed_tests(beach_days)
+    return render(request, 'index.html', ret_val)
 
 
 def show_beach(request, beach_name):
@@ -64,3 +69,14 @@ def show_beach(request, beach_name):
     ret_val['results_by_date'] = results_by_date
 
     return render(request, 'show_beach.html', ret_val)
+
+
+def view_beach(request, beach_name):
+    url = r'https://data.cityofchicago.org/resource/awhh-mb2r.json?dna_sample_timestamp > "2017-01-01T00:00:00.000"' +\
+           '&beach=' + beach_name
+    urlData = requests.get(url).content
+    pdb.set_trace()
+    lab_results2017 = pd.read_csv(io.StringIO(urlData.decode('utf-8')))
+
+    return render(request, 'show_beach.html', {})
+
