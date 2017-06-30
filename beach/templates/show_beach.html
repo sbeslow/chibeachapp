@@ -12,7 +12,6 @@
 
     <div class="container">
         <div id="scatterChart" style="width:100%; height:400px;"></div>
-        <div id="samplesByYearGraph" style="width:100%; height:400px;"></div>
     </div>
 
 
@@ -24,10 +23,9 @@
     <script src="{% static 'js/single_beach_scatter_hc.js' %}"></script>
 
     <script>
-        var resultsByDate = {{ results_by_date | jsonify }};
-        drawScatterChart(resultsByDate['2017']);
-        var samplesByYear = {{ samples_by_year | jsonify }};
-        drawSamplesByYear(samplesByYear);
+
+        drawScatterChart({{ scatter_points | jsonify }})
+
     </script>
 
 {% endblock %}

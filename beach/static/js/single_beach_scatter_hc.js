@@ -1,5 +1,5 @@
-function drawScatterChart(results_by_date) {
-
+function drawScatterChart(scatter_points) {
+/*
     var culture = []
     var dna = []
 
@@ -11,7 +11,7 @@ function drawScatterChart(results_by_date) {
         result = results_by_date['culture'][i];
         culture.push({x: new Date(result[0]), y: result[1]})
     }
-
+*/
     Highcharts.chart('scatterChart', {
         chart: {
             type: 'scatter',
@@ -80,12 +80,8 @@ function drawScatterChart(results_by_date) {
         series: [{
             name: 'DNA',
             color: 'rgba(223, 83, 83, .5)',
-            data: dna,
+            data: scatter_points,
 
-        }, {
-            name: 'Culture',
-            color: 'rgba(119, 152, 191, .5)',
-            data: culture
         }]
     });
 }
