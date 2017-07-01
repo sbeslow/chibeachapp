@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from beach.chi_portal import get_beach_days_2017
-from beach.beach_days import find_failed_tests, get_scatter_points
+from beach.beach_days import find_failed_tests, get_scatter_plot
 
 
 def index(request):
@@ -14,5 +14,5 @@ def show_beach(request, beach_name):
     beach_days = get_beach_days_2017()
     this_beach = beach_days.loc[beach_days['beach_name'] == beach_name]
     ret_val = {}
-    ret_val['scatter_points'] = get_scatter_points(this_beach)
+    ret_val['scatter_plot'] = get_scatter_plot(this_beach)
     return render(request, 'show_beach.html', ret_val)

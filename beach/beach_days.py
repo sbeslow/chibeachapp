@@ -17,15 +17,21 @@ def find_failed_tests(beach_days):
     return failed_tests.to_dict('records')
 
 
-def get_scatter_points(this_beach):
+def get_scatter_plot(this_beach):
+    this_beach['dna_reading_mean'] = this_beach['dna_reading_mean']\
+        .apply(lambda x: float("%.2f" % x))
     this_beach = this_beach.set_index('date')
     date_iter = this_beach.index.min()
     today = datetime.now().date()
     this_beach = this_beach.to_dict('index')
     scatter_points = []
-    while date_iter.date() <= today:
+    x_ticks = 0
+    while date_iter <= today:
         dna_reading = this_beach[date_iter]['dna_reading_mean'] if date_iter in this_beach else None
-        scatter_points.append([date_iter, dna_reading])
-        date_iter = date_iter.da + timedelta(days=1)
+        predicted_level = this_beach[date_iter]['predicted_level'] if date_iter in this_beach else None
+        scatter_points.append({'date': date_iter, 'dna_reading': dna_reading, 'predicted_level': predicted_level})
+        x_ticks += 1
+        date_iter = date_iter + timedelta(days=1)
 
-    return scatter_points
+    scatter_plot = {'points': scatter_points, 'x_ticks': 5, 'y_ticks': 10}
+    return scatter_plot

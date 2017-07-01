@@ -8,23 +8,39 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
           integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
+    <style>
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: grey;
+            stroke-width: 1;
+            shape-rendering: crispEdges;
+        }
+
+    .tooltip {
+      position: absolute;
+      width: 200px;
+      height: 28px;
+      pointer-events: none;
+    }
+</style>
+
     <h1>{{beach_name}}</h1>
 
     <div class="container">
-        <div id="scatterChart" style="width:100%; height:400px;"></div>
+        <div id="scatterPlotDiv"></div>
     </div>
 
 
 {% endblock %}
 
 {% block scripts %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highcharts/5.0.12/highcharts.js"></script>
-    <script src="{% static 'js/samples_by_year_hc.js' %}"></script>
-    <script src="{% static 'js/single_beach_scatter_hc.js' %}"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="{% static 'js/beach_scatter.js' %}"></script>
 
     <script>
 
-        drawScatterChart({{ scatter_points | jsonify }})
+        drawScatterPlot({{ scatter_plot | jsonify }})
 
     </script>
 
