@@ -1,77 +1,112 @@
+function drawScatter(scatterPlot) {
 
-function drawScatterPlot(scatterPlot) {
+    var readings = []
+    var predictions = []
 
-    // Set the dimensions of the canvas / graph
-    var margin = {top: 30, right: 20, bottom: 30, left: 50},
-        width = $( "#scatterPlotDiv" ).width(),
-        height = $( window ).height() - $( "#navBar" ).height() - 100;
+    for (var i = 0; i < scatterPlot.readings.length; i++) {
+        readings.push([Date.parse(scatterPlot.readings[i][0]), scatterPlot.readings[i][1]])
+    }
 
-    // Parse the date / time
-    var parseDate = d3.time.format("%Y-%m-%d").parse;
+    var series = [{
+            name: 'Readings',
+            color: 'rgba(223, 83, 83, .5)',
+            data: readings
 
-    // Set the ranges
-    var x = d3.time.scale().range([0, width]);
-    var y = d3.scale.linear().range([height, 0]);
+    }]
 
-    // Define the axes
-    var xAxis = d3.svg.axis().scale(x)
-        .orient("bottom").ticks(scatterPlot.x_ticks);
+    var title = 'E-Coli Samples (2017)';
 
-    var yAxis = d3.svg.axis().scale(y)
-        .orient("left").ticks(scatterPlot.y_ticks);
-        
-    // Adds the svg canvas
-    var svg = d3.select("#scatterPlotDiv")
-        .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-            .attr("transform", 
-                  "translate(" + margin.left + "," + margin.top + ")");
+    for (var i = 0; i < scatterPlot.predictions.length; i++) {
+        predictions.push([Date.parse(scatterPlot.predictions[i][0]), scatterPlot.predictions[i][1]])
+    }
 
-    // Scale the range of the data
-    x.domain(d3.extent(scatterPlot.points, function(d) { return parseDate(d.date); }));
-    y.domain([0, d3.max(scatterPlot.points, function(d) { return d.dna_reading; })]);
+    if (predictions.length > 0) {
+        series.push(
+            {
+                name: 'Predictions',
+                color: 'rgba(119, 152, 191, .5)',
+                data: predictions
+            }
+        )
+        title = 'E-Coli levels -- Samples vs Predictions (2017)';
+    }
 
-    // add the tooltip area to the webpage
-    var tooltip = d3.select("body").append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0);
-
-    svg.selectAll(".dot")
-        .data(scatterPlot.points)
-        .enter().append("circle")
-        .attr("class", "dot")
-        .attr("r", 3.5)
-        .attr("cx", function(d) {
-            return x(parseDate(d.date));
-        })
-        .attr("cy", function(d) { return y(d.dna_reading); })
-        .style("fill", function(d) { return 'red'; }) 
-        .on("mouseover", function(d) {
-            tooltip.transition()
-                   .duration(200)
-                   .style("opacity", .9);
-            tooltip.html("Point")
-                   .style("left", (d3.event.pageX + 5) + "px")
-                   .style("top", (d3.event.pageY - 28) + "px");
-          })
-          .on("mouseout", function(d) {
-              tooltip.transition()
-                   .duration(500)
-                   .style("opacity", 0);
-          });
-
-
-    // Add the X Axis
-    svg.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + height + ")")
-            .call(xAxis);
-
-    // Add the Y Axis
-    svg.append("g")
-            .attr("class", "y axis")
-            .call(yAxis);
-
+    Highcharts.chart('scatterPlotDiv', {
+        chart: {
+            type: 'scatter',
+            zoomType: 'xy'
+        },
+        title: {
+            text: title
+        },
+        xAxis: {
+            tickInterval: (24 * 3600 * 1000), // the number of milliseconds in a day
+            allowDecimals: false,
+            title: {
+                text: 'Date',
+                scalable: false
+            },
+            type: 'datetime',
+            minRange: 14 * 24 * 3600000,
+            labels: {
+                formatter: function() {
+                    return Highcharts.dateFormat('%d-%b-%y', (this.value));
+                }
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'E-Coli level (cfu)'
+            },
+            plotLines: [{
+                value: 1000,
+                color: 'red',
+                dashStyle: 'shortdash',
+                width: 2,
+                label: {
+                    text: 'Elevated E-Coli Level'
+                }
+            }], 
+        },
+        legend: {
+            align: 'right',
+            verticalAlign: 'top',
+            floating: true,
+            x: 0,
+            y: 0
+        },
+        tooltip: {
+            formatter: function() {
+                    return  '<b>' + this.series.name.slice(0,-1) +'</b><br/>' +
+                        Highcharts.dateFormat('%b-%e',
+                                              new Date(this.x))
+                    + '<br>' + this.y + ' cfu';
+            }
+        },
+        plotOptions: {
+            scatter: {
+                marker: {
+                    radius: 5,
+                    states: {
+                        hover: {
+                            enabled: true,
+                            lineColor: 'rgb(100,100,100)'
+                        }
+                    }
+                },
+                states: {
+                    hover: {
+                        marker: {
+                            enabled: false
+                        }
+                    }
+                },
+                tooltip: {
+                        headerFormat: '<b>{series.name}</b><br>'
+                }
+            }
+        },
+        series: series
+    });
 }
+

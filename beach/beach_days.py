@@ -20,6 +20,29 @@ def find_failed_tests(beach_days):
 def get_scatter_plot(this_beach):
     this_beach['dna_reading_mean'] = this_beach['dna_reading_mean']\
         .apply(lambda x: float("%.2f" % x))
+
+    readings, predictions = [], []
+    this_beach = this_beach.set_index('date')
+    date_iter = this_beach.index.min()
+    today = datetime.now().date()
+    this_beach = this_beach.to_dict('index')
+
+    while date_iter <= today:
+        if date_iter in this_beach:
+            dna_reading = this_beach[date_iter]['dna_reading_mean'] if date_iter in this_beach else None
+            readings.append([date_iter.strftime('%B %d, %Y'), dna_reading])
+
+            if str(this_beach[date_iter]['predicted_level']).lower() != 'nan':
+                predictions.append([date_iter.strftime('%B %d, %Y'), this_beach[date_iter]['predicted_level']])
+        date_iter = date_iter + timedelta(days=1)
+
+    ret_val = {'readings': readings, 'predictions': predictions}
+    return ret_val
+
+
+def get_scatter_plot_old(this_beach):
+    this_beach['dna_reading_mean'] = this_beach['dna_reading_mean']\
+        .apply(lambda x: float("%.2f" % x))
     this_beach = this_beach.set_index('date')
     date_iter = this_beach.index.min()
     today = datetime.now().date()

@@ -33,8 +33,9 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Beaches<span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Beach 1</a></li>
-                        <li><a href="#">Beach 2</a></li>
+                        {% for beach in beaches %}
+                            <li><a href="{% url 'show_beach' beach %}">{{ beach }}</a></li>
+                        {% endfor %}
                     </ul>
                 </li>
             </ul>

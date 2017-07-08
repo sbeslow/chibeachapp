@@ -19,7 +19,7 @@
             <table class="table">
                 {% for failed_test in failed_tests %}
                     <tr>
-                        <td>{{ failed_test.beach_name }}</td>
+                        <td><a href="{% url 'show_beach' failed_test.beach_name %}">{{ failed_test.beach_name }}</a></td>
                         <td>{{ failed_test.date }}</td>
                         <td>{{ failed_test.dna_reading_mean }}</td>
                         <td>{{ failed_test.is_today }}</td>
