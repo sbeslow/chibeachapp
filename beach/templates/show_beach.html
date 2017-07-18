@@ -8,11 +8,32 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
           integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
+    <style>
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: grey;
+            stroke-width: 1;
+            shape-rendering: crispEdges;
+        }
+
+    .tooltip {
+      position: absolute;
+      width: 200px;
+      height: 28px;
+      pointer-events: none;
+    }
+</style>
+
     <h1>{{beach_name}}</h1>
 
     <div class="container">
-        <div id="scatterPlotDiv" style="width:100%; height:400px;"></div>
+        <div class="col-sm-6">
+
+            <div id="scatterPlotDiv"></div>
+        </div>
     </div>
+    <h2>The end</h2>
 
 
 {% endblock %}
@@ -23,7 +44,7 @@
 
     <script>
 
-        drawScatter({{ scatter_plot | jsonify }});
+        drawScatterPlot({{ scatter_plot | jsonify }})
 
     </script>
 

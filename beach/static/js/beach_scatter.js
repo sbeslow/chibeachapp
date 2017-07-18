@@ -1,4 +1,4 @@
-function drawScatter(scatterPlot) {
+function drawScatterPlot(scatterPlot) {
 
     var readings = []
     var predictions = []
