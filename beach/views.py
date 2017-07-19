@@ -24,3 +24,8 @@ def show_beach(request, beach_name):
                         'num_predictions_failed': len(predictions.loc[predictions['predicted_level'] >= 1000])}
     ret_val['scatter_plot'] = get_scatter_plot(this_beach)
     return render(request, 'show_beach.html', ret_val)
+
+
+def chicago(request):
+    ret_val = {}
+    return render(request, 'chicago.html', ret_val)

@@ -8,11 +8,12 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
           integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <div class="container">
+        <h1>Chicago Fecal Report</h1>
         <div class="col-sm-6" style="text-align:left;">
-            <h1>Chicago Fecal Report</h1>
-            <h3>The quest to adequently warn the pubic of an invisible health risk</h3>
-            <h5>Every weekday, the Park District samples the beaches, and issues swim advisory when
-            the test fails <strong>(DNA rate of over 1000 cfu)</strong></h5>
+            <h3><strong>Samples taken at Chicago Beaches:</strong> {{ num_samples }}</h3>
+            <h3><strong>Failed Samples at the Beaches:</strong> {{ failed_samples }}</h3>
+            <h3><strong>Model Accuracy:</strong> {{ model_accuracy }}</h3>
+
         </div>
         <div class="col-sm-6">
             <h2>Recent Failed Tests</h2>
