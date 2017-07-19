@@ -10,20 +10,24 @@
     <div class="container">
         <h1>Chicago Fecal Report</h1>
         <div class="col-sm-6" style="text-align:left;">
-            <h3><strong>Samples taken at Chicago Beaches:</strong> {{ num_samples }}</h3>
-            <h3><strong>Failed Samples at the Beaches:</strong> {{ failed_samples }}</h3>
-            <h3><strong>Model Accuracy:</strong> {{ model_accuracy }}</h3>
+            <h3><strong>Samples taken at Chicago Beaches:</strong> {{ stats.num_samples }}</h3>
+            <h3><strong>Failed Samples at the Beaches:</strong> {{ stats.failed_samples }}</h3>
+            <h3><strong>Predicted Failed Samples:</strong> {{ stats.predicted_failed }}</h3>
 
         </div>
         <div class="col-sm-6">
             <h2>Recent Failed Tests</h2>
+            <h5>
+                ({% if last_sample %}Last sample taken on: {{ last_sample }}
+                {%else%}No samples taken yet today{% endif %})
+
             <table class="table">
                 {% for failed_test in failed_tests %}
-                    <tr>
+                    <tr {% if failed_test.is_today %}style="background-color:#ff7518"{% endif %}>
                         <td><a href="{% url 'show_beach' failed_test.beach_name %}">{{ failed_test.beach_name }}</a></td>
                         <td>{{ failed_test.date }}</td>
                         <td>{{ failed_test.dna_reading_mean }}</td>
-                        <td>{{ failed_test.is_today }}</td>
+                        <td>{% if failed_test.is_today %}Today{% endif %}</td>
                     </tr>
                 {% endfor %}
 
