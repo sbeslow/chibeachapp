@@ -5,47 +5,43 @@
 
 {% block content %}
 
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
-          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
-    <style>
-        .axis path,
-        .axis line {
-            fill: none;
-            stroke: grey;
-            stroke-width: 1;
-            shape-rendering: crispEdges;
-        }
 
-    .tooltip {
-      position: absolute;
-      width: 200px;
-      height: 28px;
-      pointer-events: none;
-    }
-</style>
+<div class="container">
 
-    <h1>{{beach_name}}</h1>
+    <h1>{{ beach.beach_name }}</h1>
+    <div class="col-sm-6 col-md-3">
 
-    <div class="container">
-        <div class="col-sm-6">
+        <h2><strong>Samples taken:</strong> {{ beach.samples_taken }}</h2>
+        <h2><strong>Failed Samples:</strong> {{ beach.failed_samples }}</h2>
+        {% if beach.is_predicted %}
+        <h2><strong>Predictions:</strong> {{ beach.num_predictions}}</h2>
+        <h2><strong>Predicted failed:</strong> {{ beach.num_predictions_failed }}</h2>
+        {% else %}
+        <h2>Not predicted</h4>
+        {% endif %}
 
-            <div id="scatterPlotDiv"></div>
-        </div>
     </div>
-    <h2>The end</h2>
+    <div class="col-sm-6 col-md-8 col-md-offset-1">
+
+        <div id="scatterPlotDiv" style="height: 400px"></div>
+    </div>
+
+</div>
 
 
 {% endblock %}
 
 {% block scripts %}
-    <script src="http://code.highcharts.com/highcharts.js"></script>
-    <script src="{% static 'js/beach_scatter.js' %}"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="{% static 'js/beach_scatter.js' %}"></script>
 
-    <script>
+<script>
 
-        drawScatterPlot({{ scatter_plot | jsonify }})
+    drawScatterPlot({{ scatter_plot | jsonify }})
 
-    </script>
+</script>
 
 {% endblock %}

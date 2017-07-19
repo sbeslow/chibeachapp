@@ -13,6 +13,14 @@ def index(request):
 def show_beach(request, beach_name):
     beach_days = get_beach_days_2017()
     this_beach = beach_days.loc[beach_days['beach_name'] == beach_name]
+
     ret_val = {'beaches': list(beach_days['beach_name'].unique())}
+
+    predictions = this_beach.loc[~this_beach['predicted_level'].isnull()]
+    ret_val['beach'] = {'beach_name': beach_name, 'samples_taken': len(this_beach),
+                        'failed_samples': len(this_beach.loc[this_beach['dna_reading_mean'] >= 1000]),
+                        'is_predicted': len(predictions) > 0,
+                        'num_predictions': len(predictions),
+                        'num_predictions_failed': len(predictions.loc[predictions['predicted_level'] >= 1000])}
     ret_val['scatter_plot'] = get_scatter_plot(this_beach)
     return render(request, 'show_beach.html', ret_val)

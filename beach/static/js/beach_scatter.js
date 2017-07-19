@@ -37,7 +37,8 @@ function drawScatterPlot(scatterPlot) {
             zoomType: 'xy'
         },
         title: {
-            text: title
+            text: title,
+            margin:65
         },
         xAxis: {
             tickInterval: (24 * 3600 * 1000), // the number of milliseconds in a day
@@ -73,7 +74,7 @@ function drawScatterPlot(scatterPlot) {
             verticalAlign: 'top',
             floating: true,
             x: 0,
-            y: 0
+            y: 40
         },
         tooltip: {
             formatter: function() {
