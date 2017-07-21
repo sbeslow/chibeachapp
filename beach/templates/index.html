@@ -5,6 +5,12 @@
 
 {% block content %}
 
+    <style>
+        tr.warning td a {
+            color: black
+        }
+    </style>
+
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
           integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <div class="container">
@@ -20,10 +26,9 @@
             <h5>
                 ({% if last_sample %}Last sample taken on: {{ last_sample }}
                 {%else%}No samples taken yet today{% endif %})
-
             <table class="table">
                 {% for failed_test in failed_tests %}
-                    <tr {% if failed_test.is_today %}style="background-color:#ff7518"{% endif %}>
+                    <tr {% if failed_test.is_today %}class="warning"{% endif %}>
                         <td><a href="{% url 'show_beach' failed_test.beach_name %}">{{ failed_test.beach_name }}</a></td>
                         <td>{{ failed_test.date }}</td>
                         <td>{{ failed_test.dna_reading_mean }}</td>
