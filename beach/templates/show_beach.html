@@ -8,6 +8,8 @@
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
 integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
+<link href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet">
+
 
 <div class="container">
 
@@ -21,27 +23,59 @@ integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQV
         <h2><strong>Predicted failed:</strong> {{ beach.num_predictions_failed }}</h2>
         {% else %}
         <h2>Not predicted</h4>
-        {% endif %}
+            {% endif %}
 
-    </div>
-    <div class="col-sm-6 col-md-8 col-md-offset-1">
+        </div>
+        <div class="col-sm-6 col-md-8 col-md-offset-1">
 
-        <div id="scatterPlotDiv" style="height: 400px"></div>
-    </div>
+            <div id="scatterPlotDiv" style="height: 400px"></div>
+        </div>
 
-</div>
+        <div class="row">
+            <div class="col-sm-8 col-md-6">
+            <h3>Samples Taken</h3>
+            <table id="samplesTable" class="display" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Measured Value</th>
+                        {%if beach.is_predicted %}<th>Predicted Value</th>{% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sample in samples %}
+                    <tr>
+                        <td>{{ sample.date }}</td>
+                        <td>{%if sample.dna_reading_mean != -1.0 %}{{ sample.dna_reading_mean }}{%else%}Not Measured{%endif%}</td>
+                        {%if beach.is_predicted %}
+                            <td>{%if sample.predicted_level != -1.0 %}{{ sample.predicted_level }}{%else%}Not Predicted{%endif%}</td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            </div>
+
+        </div>
 
 
-{% endblock %}
+        {% endblock %}
 
-{% block scripts %}
-<script src="http://code.highcharts.com/highcharts.js"></script>
-<script src="{% static 'js/beach_scatter.js' %}"></script>
+        {% block scripts %}
+        <script src="http://code.highcharts.com/highcharts.js"></script>
+        <script src="{% static 'js/beach_scatter.js' %}"></script>
+        <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
 
-<script>
+        <script>
 
-    drawScatterPlot({{ scatter_plot | jsonify }})
+            drawScatterPlot({{ scatter_plot | jsonify }})
 
-</script>
+            $(document).ready(function() {
+                $('#samplesTable').DataTable({
+                    "order": [[ 0, "desc"]]
+                })
+            } );
 
-{% endblock %}
+        </script>
+
+        {% endblock %}

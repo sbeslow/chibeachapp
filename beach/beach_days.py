@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import pandas as pd
 
 
 def find_failed_tests(beach_days):
@@ -22,6 +23,17 @@ def find_total_stats(beach_days):
             'failed_samples': len(samples.loc[samples['dna_reading_mean'] >= 1000]),
             'predicted_failed': len(predictions.loc[predictions['predicted_level'] >= 1000])
             }
+
+
+def per_beach_stats(beach_days):
+    samples = beach_days.loc[~beach_days['dna_reading_mean'].isnull()]
+    num_samples = samples.groupby('beach_name').count()['dna_test_id']
+    # df.columns = ['num_samples']
+    num_failed = samples.loc[samples['dna_reading_mean'] >= 1000].groupby('beach_name').count()['dna_test_id']
+    df = pd.concat([num_samples, num_failed], axis=1).fillna(0).astype(int)
+    df.columns = ['num_samples', 'num_failed']
+    df['beach_name'] = df.index.values
+    return df.to_dict('records')
 
 
 def get_scatter_plot(this_beach):

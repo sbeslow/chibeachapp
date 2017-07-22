@@ -5,46 +5,90 @@
 
 {% block content %}
 
-    <style>
-        tr.warning td a {
-            color: black
-        }
-    </style>
+<style>
+    tr.warning td a {
+        color: black
+    }
+</style>
 
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
-          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    <div class="container">
-        <h1>Chicago Fecal Report</h1>
-        <div class="col-sm-6" style="text-align:left;">
-            <h3><strong>Samples taken at Chicago Beaches:</strong> {{ stats.num_samples }}</h3>
-            <h3><strong>Failed Samples at the Beaches:</strong> {{ stats.failed_samples }}</h3>
-            <h3><strong>Predicted Failed Samples:</strong> {{ stats.predicted_failed }}</h3>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
+<link href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet">
+
+<div class="container">
+    <h1>Chicago Fecal Report</h1>
+    <div class="col-sm-6" style="text-align:left;">
+        <h3><strong>Samples taken at Chicago Beaches:</strong> {{ stats.num_samples }}</h3>
+        <h3>
+            <strong>Failed Samples at the Beaches:</strong> {{ stats.failed_samples }}&nbsp;&nbsp;
+            <a data-container="body" data-toggle="popover" data-placement="right" data-content="Exceeding more than 1000cfu.  More info here.">
+                <span class="glyphicon glyphicon-question-sign" aria-hidden="true" style="font-size:80%"></span>
+            </a>
+            
+        </h3>
+        <h3>
+            <strong>Predicted Failed Samples:</strong> {{ stats.predicted_failed }}&nbsp;&nbsp;
+            <a data-container="body" data-toggle="popover" data-placement="right" data-content="Predicted to exceed more than 1000cfu.  More info here.">
+                <span class="glyphicon glyphicon-question-sign" aria-hidden="true" style="font-size:80%"></span>
+            </a>
+        </h3>
+
+        <div id="perBeachTablDiv" style="margin-top:65px">
+            <table id="perBeachTable" class="display" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>Beach</th>
+                        <th>Samples Taken</th>
+                        <th>Samples Failed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for beach_stat in per_beach_stats %}
+                    <tr>
+                        <td><a href="{% url 'show_beach' beach_stat.beach_name %}">{{ beach_stat.beach_name }}</a></td>
+                        <td>{{ beach_stat.num_samples }}</td>
+                        <td>{{ beach_stat.num_failed }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-        <div class="col-sm-6">
-            <h2>Recent Failed Tests</h2>
-            <h5>
-                ({% if last_sample %}Last sample taken on: {{ last_sample }}
-                {%else%}No samples taken yet today{% endif %})
+    </div>
+    <div class="col-sm-6">
+        <h2>Recent Failed Tests</h2>
+        <h5>
+            ({% if last_sample %}Last sample taken on: {{ last_sample }}
+            {%else%}Includes samples taken today{% endif %})</h5>
             <table class="table">
                 {% for failed_test in failed_tests %}
-                    <tr {% if failed_test.is_today %}class="warning"{% endif %}>
-                        <td><a href="{% url 'show_beach' failed_test.beach_name %}">{{ failed_test.beach_name }}</a></td>
-                        <td>{{ failed_test.date }}</td>
-                        <td>{{ failed_test.dna_reading_mean }}</td>
-                        <td>{% if failed_test.is_today %}Today{% endif %}</td>
-                    </tr>
+                <tr {% if failed_test.is_today %}class="warning"{% endif %}>
+                    <td><a href="{% url 'show_beach' failed_test.beach_name %}">{{ failed_test.beach_name }}</a></td>
+                    <td>{{ failed_test.date }}</td>
+                    <td>{{ failed_test.dna_reading_mean }}</td>
+                    <td>{% if failed_test.is_today %}Today{% endif %}</td>
+                </tr>
                 {% endfor %}
 
             </table>
-
         </div>
-
-
     </div>   
 
-{% endblock %}
+    {% endblock %}
 
-{% block scripts %}
+    {% block scripts %}
+    <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
 
-{% endblock %}
+    <script>
+        $(document).ready(function() {
+            $('#perBeachTable').DataTable({
+                "order": [[ 2, "desc"]]
+            })
+        } );
+
+        $(function () {
+          $('[data-toggle="popover"]').popover()
+      })
+  </script>
+
+  {% endblock %}
