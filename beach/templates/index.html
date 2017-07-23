@@ -17,7 +17,61 @@ integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQV
 <link href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet">
 
 <div class="container">
-    <h1>Chicago Fecal Report</h1>
+    <div class="row">
+        <div class="col-sm-8 col-sm-offset-1">
+            <h1>Over the course of 2017, the City of Chicago has taken 
+                <span class="text-warning" style="text-decoration: underline;">{{ stats.num_samples }}</span> 
+                e-coli samples at beaches so far.  Of these, 
+                <span class="text-warning" style="text-decoration: underline;">{{ stats.failed_samples }}</span> 
+                have failed by exceeding the EPA's standards for safe exposure.
+            </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <h3 style="text-align:center;">Fecal Sample Results, 2017</h3>
+            <div id="perBeachTablDiv" style="margin-top:65px">
+                <table id="perBeachTable" class="display" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Beach</th>
+                            <th>Samples Taken</th>
+                            <th>Samples Failed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for beach_stat in per_beach_stats %}
+                        <tr>
+                            <td><a href="{% url 'show_beach' beach_stat.beach_name %}">{{ beach_stat.beach_name }}</a></td>
+                            <td>{{ beach_stat.num_samples }}</td>
+                            <td>{{ beach_stat.num_failed }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>        
+
+        </div>
+        <div class="col-sm-6">
+        <h2>Recent Failed Tests</h2>
+        <h5>
+            ({% if last_sample %}Last sample taken on: {{ last_sample }}
+            {%else%}Includes samples taken today{% endif %})</h5>
+            <table class="table">
+                {% for failed_test in failed_tests %}
+                <tr {% if failed_test.is_today %}class="warning"{% endif %}>
+                    <td><a href="{% url 'show_beach' failed_test.beach_name %}">{{ failed_test.beach_name }}</a></td>
+                    <td>{{ failed_test.date }}</td>
+                    <td>{{ failed_test.dna_reading_mean }}</td>
+                    <td>{% if failed_test.is_today %}Today{% endif %}</td>
+                </tr>
+                {% endfor %}
+
+            </table>
+
+        </div>
+
+    </div>
     <div class="col-sm-6" style="text-align:left;">
         <h3><strong>Samples taken at Chicago Beaches:</strong> {{ stats.num_samples }}</h3>
         <h3>
@@ -34,44 +88,11 @@ integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQV
             </a>
         </h3>
 
-        <div id="perBeachTablDiv" style="margin-top:65px">
-            <table id="perBeachTable" class="display" cellspacing="0" width="100%">
-                <thead>
-                    <tr>
-                        <th>Beach</th>
-                        <th>Samples Taken</th>
-                        <th>Samples Failed</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for beach_stat in per_beach_stats %}
-                    <tr>
-                        <td><a href="{% url 'show_beach' beach_stat.beach_name %}">{{ beach_stat.beach_name }}</a></td>
-                        <td>{{ beach_stat.num_samples }}</td>
-                        <td>{{ beach_stat.num_failed }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+
     </div>
     <div class="col-sm-6">
-        <h2>Recent Failed Tests</h2>
-        <h5>
-            ({% if last_sample %}Last sample taken on: {{ last_sample }}
-            {%else%}Includes samples taken today{% endif %})</h5>
-            <table class="table">
-                {% for failed_test in failed_tests %}
-                <tr {% if failed_test.is_today %}class="warning"{% endif %}>
-                    <td><a href="{% url 'show_beach' failed_test.beach_name %}">{{ failed_test.beach_name }}</a></td>
-                    <td>{{ failed_test.date }}</td>
-                    <td>{{ failed_test.dna_reading_mean }}</td>
-                    <td>{% if failed_test.is_today %}Today{% endif %}</td>
-                </tr>
-                {% endfor %}
 
-            </table>
-        </div>
+
     </div>   
 
     {% endblock %}

@@ -16,13 +16,13 @@ integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQV
     <h1>{{ beach.beach_name }} Beach</h1>
     <div class="col-sm-6 col-md-3">
 
-        <h2><strong>Samples taken:</strong> {{ beach.samples_taken }}</h2>
-        <h2><strong>Failed Samples:</strong> {{ beach.failed_samples }}</h2>
+        <h3><strong>Samples taken:</strong> {{ beach.samples_taken }}</h3>
+        <h3><strong>Failed Samples:</strong> {{ beach.failed_samples }}</h3>
         {% if beach.is_predicted %}
-        <h2><strong>Predictions:</strong> {{ beach.num_predictions}}</h2>
-        <h2><strong>Predicted failed:</strong> {{ beach.num_predictions_failed }}</h2>
+        <h3><strong>Predictions:</strong> {{ beach.num_predictions}}</h3>
+        <h3><strong>Predicted failed:</strong> {{ beach.num_predictions_failed }}</h3>
         {% else %}
-        <h2>Not predicted</h4>
+        <h3>Not predicted</h3>
             {% endif %}
 
         </div>
